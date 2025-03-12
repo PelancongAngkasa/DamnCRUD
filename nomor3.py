@@ -2,7 +2,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-class LoginTestCase:
+class TestDamnCRUD:
 
     @classmethod
     @pytest.fixture(scope="class", autouse=True)
