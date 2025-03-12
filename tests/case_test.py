@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
 class TestDamnCRUD(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         option = webdriver.FirefoxOptions()
@@ -66,7 +65,7 @@ class TestDamnCRUD(unittest.TestCase):
     def test_5_sign_out(self):
         self.browser.get('f"{self.url}/index.php')  
         self.browser.find_element(By.XPATH, "/html/body/div[1]/div[1]/div/div/a[3]").click()
-        expected_url = "http://localhost/DamnCRUD/login.php"
+        expected_url = 'f"{self.url}/login.php'
         actual_url = self.browser.current_url
         self.assertEqual(expected_url, actual_url)
 
