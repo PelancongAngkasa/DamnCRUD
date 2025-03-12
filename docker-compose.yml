@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: docker-apache
+    ports:
+      - "80:80"
+    networks:
+      - isolated
+
+  selenium:
+    image: selenium/standalone-firefox:latest
+    container_name: firefox-standalone
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    shm_size: 2g
+    networks:
+      - isolated
+
+networks:
+  isolated:
+    driver: bridge

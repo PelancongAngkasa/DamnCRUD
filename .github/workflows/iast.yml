@@ -31,14 +31,21 @@ jobs:
       run: curl ${{ env.URL }}
 
     - name: ZAP Scan
-      uses: hermanka/action-full-scan@master
+      uses: zaproxy/action-full-scan@v0.4.0
       with:
-          target: ${{ env.URL }}
-          network_name: zap-isolated
+        target: ${{ env.URL }}
+        args: '-t 6000 -r zap_report.html -J zap_report.json -w zap_report.md -x zap_report.xml --auto -m 10 -z "-config api.key=12345 -config spider.maxDuration=10 -config scanner.attackOnStart=true -config scanner.attackStrength=HIGH -config scanner.alertThreshold=LOW"'
+        network_name: isolated
+
+    - name: Upload ZAP Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: zap-report
+        path: zap_report.html
 
     - name: stop docker
       run: docker stop docker-apache
-  
+
   sast:
     name: Psalm
     permissions: write-all
