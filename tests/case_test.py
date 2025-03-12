@@ -8,7 +8,7 @@ class TestDamnCRUD(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         option = webdriver.FirefoxOptions()
-        option.add_argument('--headless')
+        #option.add_argument('--headless')
         cls.browser = webdriver.Firefox(options=option)
         try:
             cls.url = os.environ['URL']
@@ -46,7 +46,7 @@ class TestDamnCRUD(unittest.TestCase):
         WebDriverWait(self.browser, timeout).until(
             lambda driver: driver.current_url == url
         )
-        
+
     def test_4_add_contact(self):
         self.browser.get('http://localhost/DamnCRUD/create.php')
         expected_result = "PelancongAngkasa"
