@@ -34,7 +34,7 @@ jobs:
       uses: zaproxy/action-full-scan@v0.4.0
       with:
         target: ${{ env.URL }}
-        args: '-t 6000 -r zap_report.html -J zap_report.json -w zap_report.md -x zap_report.xml --auto -m 10 -z "-config api.key=12345 -config spider.maxDuration=10 -config scanner.attackOnStart=true -config scanner.attackStrength=HIGH -config scanner.alertThreshold=LOW"'
+        args: '-t 12000 -r zap_report.html -J zap_report.json -w zap_report.md -x zap_report.xml --auto -m 20 -z "-config api.key=12345 -config spider.maxDuration=20 -config scanner.attackOnStart=true -config scanner.attackStrength=INSANE -config scanner.alertThreshold=LOW -config xssscanner.enabled=true -config xssscanner.attackStrength=INSANE -config xssscanner.alertThreshold=LOW"'
         network_name: isolated
 
     - name: Upload ZAP Report
@@ -43,7 +43,7 @@ jobs:
         name: zap-report
         path: zap_report.html
 
-    - name: stop docker
+    - name: Stop Docker
       run: docker stop docker-apache
 
   sast:
