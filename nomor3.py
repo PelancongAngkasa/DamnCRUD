@@ -37,7 +37,31 @@ class LoginTestCase(unittest.TestCase):
                
     def test_4_add_contact(self):
         self.browser.get('http://localhost/DamnCRUD/create.php')
-         
+        expected_result = "PelancongAngkasa"
+        self.browser.find_element(By.ID, "name").send_keys("PelancongAngkasa")
+        self.browser.find_element(By.ID, "email").send_keys("pelancongangkasa@email.com")
+        self.browser.find_element(By.ID, "phone").send_keys("08123456789")
+        self.browser.find_element(By.ID, "title").send_keys("Attacker")
+        self.browser.find_element(By.XPATH, "/html/body/div[1]/div/div/div/div[1]/form/input[5]").click()
+        try:
+            actual_result = self.browser.find_element(By.XPATH, "//table[@id='employee']//td[contains(text(), 'PelancongAngkasa')]").text
+        except:
+        # Jika tidak ditemukan, klik tombol "Next" untuk ke halaman berikutnya
+            try:
+                self.browser.find_element(By.XPATH, '//*[@id="employee_next"]/a').click()
+                actual_result = self.browser.find_element(By.XPATH, "//table[@id='employee']//td[contains(text(), 'PelancongAngkasa')]").text
+            except:
+                actual_result = ""
+
+        self.assertIn(expected_result, actual_result)
+    
+    def test_5_sign_out(self):
+        self.browser.get('http://localhost/DamnCRUD/index.php')  
+        self.browser.find_element(By.XPATH, "/html/body/div[1]/div[1]/div/div/a[3]").click()
+        expected_url = "http://localhost/DamnCRUD/login.php"
+        actual_url = self.browser.current_url
+        self.assertEqual(expected_url, actual_url)
+
 
     @classmethod
     def tearDownClass(self):
