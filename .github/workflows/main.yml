@@ -19,7 +19,7 @@ jobs:
         run: docker build -t my-php-site:latest .
 
       - name: Run AUT using docker-compose
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Get AUT URL
         run: |
