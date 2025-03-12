@@ -1,12 +1,15 @@
-import unittest
+import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-class LoginTestCase(unittest.TestCase):
+class LoginTestCase:
 
     @classmethod
-    def setUpClass(self):
-        self.browser = webdriver.Firefox()
+    @pytest.fixture(scope="class", autouse=True)
+    def setup_class(cls):
+        cls.browser = webdriver.Firefox()
+        yield
+        cls.browser.quit()
 
     def test_1_valid_creds(self):
         self.browser.get('http://localhost/DamnCRUD/login.php')
@@ -66,6 +69,3 @@ class LoginTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.browser.quit()
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2,warnings='ignore') 
