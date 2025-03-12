@@ -16,7 +16,7 @@ class TestDamnCRUD(unittest.TestCase):
             cls.url = "http://localhost/DamnCRUD/src"
 
     def test_1_valid_creds(self):
-        self.browser.get('f"{self.url}/login.php')
+        self.browser.get('http://localhost/DamnCRUD/login.php')
         expected_result = "Howdy, damn admin!"        
         self.browser.find_element(By.ID, "inputUsername").send_keys("admin")
         self.browser.find_element(By.ID, "inputPassword").send_keys("nimda666!")
@@ -25,7 +25,7 @@ class TestDamnCRUD(unittest.TestCase):
         self.assertIn(expected_result, actual_result)
 
     def test_2_invalid_username(self):           
-        self.browser.get('f"{self.url}/login.php')
+        self.browser.get('http://localhost/DamnCRUD/login.php')
         expected_result = "Damn, wrong credentials!!"
         self.browser.find_element(By.ID, "inputUsername").send_keys("invalid_user")
         self.browser.find_element(By.ID, "inputPassword").send_keys("nimda666!")
@@ -34,7 +34,7 @@ class TestDamnCRUD(unittest.TestCase):
         self.assertIn(expected_result, actual_result)
         
     def test_3_invalid_password(self):
-        self.browser.get('f"{self.url}/login.php')           
+        self.browser.get('http://localhost/DamnCRUD/login.php')           
         expected_result = "Damn, wrong credentials!!"
         self.browser.find_element(By.ID, "inputUsername").send_keys("admin")
         self.browser.find_element(By.ID, "inputPassword").send_keys("invalid_password")
@@ -43,7 +43,7 @@ class TestDamnCRUD(unittest.TestCase):
         self.assertIn(expected_result, actual_result)
                
     def test_4_add_contact(self):
-        self.browser.get('f"{self.url}/create.php')
+        self.browser.get('http://localhost/DamnCRUD/create.php')
         expected_result = "PelancongAngkasa"
         self.browser.find_element(By.ID, "name").send_keys("PelancongAngkasa")
         self.browser.find_element(By.ID, "email").send_keys("pelancongangkasa@email.com")
@@ -63,9 +63,9 @@ class TestDamnCRUD(unittest.TestCase):
         self.assertIn(expected_result, actual_result)
     
     def test_5_sign_out(self):
-        self.browser.get('f"{self.url}/index.php')  
+        self.browser.get('http://localhost/DamnCRUD/index.php')  
         self.browser.find_element(By.XPATH, "/html/body/div[1]/div[1]/div/div/a[3]").click()
-        expected_url = 'f"{self.url}/login.php'
+        expected_url = 'http://localhost/DamnCRUD/login.php'
         actual_url = self.browser.current_url
         self.assertEqual(expected_url, actual_url)
 
