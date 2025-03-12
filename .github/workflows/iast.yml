@@ -20,7 +20,7 @@ jobs:
       run: docker build -t my-php-site:latest .
 
     - name: Run AUT
-      run: docker-compose up -d
+      run: docker compose up -d
     - name: Get AUT URL
       run: |
         URL=http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1)
