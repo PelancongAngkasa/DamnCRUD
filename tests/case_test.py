@@ -41,7 +41,12 @@ class TestDamnCRUD(unittest.TestCase):
         self.browser.find_element(By.XPATH, "//button[@type='submit']").click()
         actual_result = self.browser.find_element(By.XPATH, "//div[@class='checkbox mb-3']/label").text
         self.assertIn(expected_result, actual_result)
-               
+
+    def wait_for_url(self, url, timeout=10):
+        WebDriverWait(self.browser, timeout).until(
+            lambda driver: driver.current_url == url
+        )
+        
     def test_4_add_contact(self):
         self.browser.get('http://localhost/DamnCRUD/create.php')
         expected_result = "PelancongAngkasa"
