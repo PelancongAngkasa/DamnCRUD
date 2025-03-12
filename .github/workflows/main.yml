@@ -18,8 +18,8 @@ jobs:
       - name: Build AUT
         run: docker build -t my-php-site:latest .
 
-      - name: Run AUT using docker-compose
-        run: docker-compose up -d
+      - name: Run AUT 
+        run: docker run --network isolated -p 80:80 --name docker-apache -t -d my-php-site:latest
 
       - name: Get AUT URL
         run: |
