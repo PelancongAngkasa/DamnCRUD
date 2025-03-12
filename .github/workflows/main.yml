@@ -1,43 +1,49 @@
-name: Python application
-
+name: OTF Testing
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-
 jobs:
   test:
+    name: Functional Test
+    permissions: write-all
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        python-version: [3.8, 3.9]
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout the repo
+        uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Create isolated network
+        run: docker network create --driver bridge isolated
 
-    - name: Install Dependencies
-      run: |
-          pip install selenium pytest pytest-xdist
+      - name: Build AUT
+        run: docker build -t my-php-site:latest .
 
-    - name: Start Firefox (Headless Mode)
-      run: |
-          sudo apt-get update
-          sudo apt-get install -y firefox
-          wget https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.33.0-linux64.tar.gz
-          tar -xvzf geckodriver-v0.33.0-linux64.tar.gz
-          sudo mv geckodriver /usr/local/bin/
-          Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=:99
+      - name: Run AUT using docker-compose
+        run: docker-compose up -d
 
-    - name: Run Pytest in Parallel
-      run: pytest -n 4
+      - name: Get AUT URL
+        run: |
+          URL=http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1)
+          echo "URL=$URL" >> $GITHUB_ENV
+
+      - name: Check AUT URL
+        run: curl ${{ env.URL }}
+
+      - name: Selenium Preparation
+        run: docker run --network=isolated -d -p 4444:4444 -p 7900:7900 -v /dev/shm:/dev/shm --name firefox-standalone selenium/standalone-firefox:latest
+
+      - name: Wait for Selenium Hub
+        run: sh wait.sh
+
+      - name: Check the Hub
+        run: curl http://localhost:4444/ui
+
+      - name: Install Selenium client
+        run: pip install -U selenium pytest pytest-xdist
+
+      - name: Run tests using pytest
+        run: |
+          pytest -v -n 5 tests/
+
+      - name: stop docker
+        run: docker stop docker-apache
